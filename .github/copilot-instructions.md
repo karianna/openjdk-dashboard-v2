@@ -75,6 +75,11 @@ npm run-script build  # Outputs to ./dist/ with static files
 - Parcel v1 (different config than v2)
 - `http-proxy-middleware` v0.x (legacy API)
 
+### Modern Babel Setup
+- Babel 7.25+ with `@babel/plugin-transform-class-properties`
+- Supports ES6+ class field syntax and arrow function methods
+- Configuration in `src/.babelrc`
+
 ### External Dependencies
 - AdoptOpenJDK v3 API for all data (no local data sources)
 - GitHub Pages hosting (static files only, no server-side logic)
