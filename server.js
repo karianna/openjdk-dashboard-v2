@@ -1,10 +1,18 @@
 // const { createProxyMiddleware } = require('http-proxy-middleware')
-const Bundler = require('parcel-bundler')
 const express = require('express')
+const { createProxyMiddleware } = require('http-proxy-middleware')
 
-let bundler = new Bundler('index.html')
 let app = express()
 
-app.use(bundler.middleware())
+// For development, serve static files from current directory
+// In production, this would serve from the dist folder
+app.use(express.static('.'))
 
-app.listen(Number(process.env.PORT || 3000))
+// Fallback to index.html for SPA routing
+app.get('*', (req, res) => {
+  res.sendFile(require('path').join(__dirname, 'index.html'))
+})
+
+app.listen(Number(process.env.PORT || 3000), () => {
+  console.log(`Server running on http://localhost:${process.env.PORT || 3000}`)
+})
