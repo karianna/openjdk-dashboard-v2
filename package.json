@@ -8,8 +8,8 @@
 		"build": "parcel build index.html && cp CNAME 404.html dist/"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.25.0",
-		"@babel/plugin-transform-class-properties": "^7.25.0",
+		"@babel/core": "^7.28.0",
+		"@babel/plugin-transform-class-properties": "^7.27.1",
 		"parcel-bundler": "^1.12.5"
 	},
 	"dependencies": {
