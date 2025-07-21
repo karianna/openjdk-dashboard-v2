@@ -8,6 +8,11 @@ import { Radio, Slider, Checkbox } from 'antd';
 import './Trends.css';
 
 export default class Trends extends Component {
+    constructor(props) {
+        super(props);
+        this._isMounted = false;
+    }
+
     state = { 
         series: undefined,
         series2: undefined,
@@ -39,26 +44,35 @@ export default class Trends extends Component {
     };
 
     async componentDidMount() {
+        this._isMounted = true;
         await this.updateData(1, this.state.args);
         await this.updateData(2, this.state.args2);
         await this.updateMonthlyData(this.state.monthlyArgs);
-        this.setState({versions: (await get(`https://api.adoptopenjdk.net/v3/info/available_releases`)).available_releases})
+        if (this._isMounted) {
+            this.setState({versions: (await get(`https://api.adoptopenjdk.net/v3/info/available_releases`)).available_releases})
+        }
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     async updateData(seriesID, args) {
         const data = await api.tracking(this.generateParams(args))
 
-        switch(seriesID) {   
-            case 1: this.setState({series: this.processData(seriesID, data, args.type, args.visible)}); break;
-            case 2: this.setState({series2: this.processData(seriesID, data, args.type, args.visible)}); break;
-        }
-
-        if (data.length > 0) {
-            const categories = data.map(({ date }) => moment(date).format('DD-MM-YYYY'));
-
+        if (this._isMounted) {
             switch(seriesID) {   
-                case 1: this.setState({categories: categories}); break;
-                case 2: this.setState({categories2: categories}); break;
+                case 1: this.setState({series: this.processData(seriesID, data, args.type, args.visible)}); break;
+                case 2: this.setState({series2: this.processData(seriesID, data, args.type, args.visible)}); break;
+            }
+
+            if (data.length > 0) {
+                const categories = data.map(({ date }) => moment(date).format('DD-MM-YYYY'));
+
+                switch(seriesID) {   
+                    case 1: this.setState({categories: categories}); break;
+                    case 2: this.setState({categories2: categories}); break;
+                }
             }
         }
     }
@@ -85,7 +99,9 @@ export default class Trends extends Component {
         var monthlyData = {}
         data.forEach(data => monthlyData[this.parseMonth(data.month)] = data[args.type])
 
-        this.setState({monthlyData})
+        if (this._isMounted) {
+            this.setState({monthlyData})
+        }
     }
 
     generateParams(args) {
@@ -224,6 +240,11 @@ export default class Trends extends Component {
     }
 
     max(arr1, arr2) {
+        // Handle undefined/null arrays
+        if (!arr1 && !arr2) return [];
+        if (!arr1) return arr2;
+        if (!arr2) return arr1;
+        
         if (arr1.length > arr2.length) {
             return arr1
         } else {
