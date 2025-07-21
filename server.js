@@ -1,4 +1,4 @@
-const proxy = require('http-proxy-middleware')
+// const { createProxyMiddleware } = require('http-proxy-middleware')
 const Bundler = require('parcel-bundler')
 const express = require('express')
 
