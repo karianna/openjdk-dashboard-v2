@@ -21,7 +21,7 @@ export default function App() {
 	return (
 		<ConfigProvider locale={enUS}>
 			<Layout>
-				<Header className="header" style={{ background: '#152935' }}>
+				<Header className="header" style={{ background: '#152935', paddingLeft: 0 }}>
 					<div className="logo" />
 					<Menu
 						theme="dark"
@@ -32,7 +32,7 @@ export default function App() {
 							{
 								key: '1',
 								label: (
-									<a href="https://adoptopenjdk.net/" style={{ height: '100%', display: 'flex' }}>
+									<a href="https://adoptopenjdk.net/" style={{ height: 64, display: 'flex', alignItems: 'center' }}>
 										<img src={AdoptLogo} alt="Adopt Logo" />
 									</a>
 								)
